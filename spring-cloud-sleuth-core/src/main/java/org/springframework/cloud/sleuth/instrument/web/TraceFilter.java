@@ -71,8 +71,6 @@ public class TraceFilter extends GenericFilterBean {
 
 	private static final Log log = LogFactory.getLog(MethodHandles.lookup().lookupClass());
 
-	private static final String HTTP_COMPONENT = "http";
-
 	protected static final int ORDER = Ordered.HIGHEST_PRECEDENCE + 5;
 
 	protected static final String TRACE_REQUEST_ATTR = TraceFilter.class.getName()
@@ -137,7 +135,8 @@ public class TraceFilter extends GenericFilterBean {
 			processErrorRequest(filterChain, request, response, spanFromRequest);
 			return;
 		}
-		String name = HTTP_COMPONENT + ":" + uri;
+		String method = request.getMethod().toLowerCase();
+		String name = method + " " + uri;
 		Throwable exception = null;
 		try {
 			spanFromRequest = createSpan(request, skip, spanFromRequest, name);

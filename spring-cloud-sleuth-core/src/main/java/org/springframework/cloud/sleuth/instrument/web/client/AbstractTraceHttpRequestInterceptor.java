@@ -54,7 +54,8 @@ abstract class AbstractTraceHttpRequestInterceptor {
 	 */
 	protected void publishStartEvent(HttpRequest request) {
 		URI uri = request.getURI();
-		String spanName = uriScheme(uri) + ":" + uri.getPath();
+		String method = request.getMethod().name().toLowerCase();
+		String spanName = method + " " + uri.getPath();
 		Span newSpan = this.tracer.createSpan(spanName);
 		this.spanInjector.inject(newSpan, new HttpRequestTextMap(request));
 		addRequestTags(request);
@@ -62,10 +63,6 @@ abstract class AbstractTraceHttpRequestInterceptor {
 		if (log.isDebugEnabled()) {
 			log.debug("Starting new client span [" + newSpan + "]");
 		}
-	}
-
-	private String uriScheme(URI uri) {
-		return uri.getScheme() == null ? "http" : uri.getScheme();
 	}
 
 	/**

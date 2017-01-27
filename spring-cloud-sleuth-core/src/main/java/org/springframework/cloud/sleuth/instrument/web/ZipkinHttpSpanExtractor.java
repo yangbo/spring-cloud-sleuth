@@ -23,7 +23,6 @@ public class ZipkinHttpSpanExtractor implements HttpSpanExtractor {
 			MethodHandles.lookup().lookupClass());
 	private static final String HEADER_DELIMITER = "-";
 	static final String URI_HEADER = "X-Span-Uri";
-	private static final String HTTP_COMPONENT = "http";
 
 	private final Pattern skipPattern;
 
@@ -85,7 +84,7 @@ public class ZipkinHttpSpanExtractor implements HttpSpanExtractor {
 		if (StringUtils.hasText(parentName)) {
 			span.name(parentName);
 		}  else {
-			span.name(HTTP_COMPONENT + ":/parent" + uri);
+			span.name("parent " + uri);
 		}
 		if (StringUtils.hasText(processId)) {
 			span.processId(processId);

@@ -161,10 +161,26 @@ public class TraceFilterTests {
 		// We add a child span on the server side to show which controller serviced the request
 		assertThat(this.span.getParents()).containsOnly(PARENT_ID);
 		assertThat(parentSpan())
+				.hasNameEqualTo("http:/parent/")
 				.hasATag("http.url", "http://localhost/?foo=bar")
 				.hasATag("http.host", "localhost")
 				.hasATag("http.path", "/")
 				.hasATag("http.method", "GET");
+		then(TestSpanContextHolder.getCurrentSpan()).isNull();
+	}
+
+	@Test
+	public void namesASpanWithHttpMethodNameAndUri() throws Exception {
+		this.request = builder()
+				.buildRequest(new MockServletContext());
+		TraceFilter filter = new TraceFilter(this.tracer, this.traceKeys, this.spanReporter,
+				this.spanExtractor, this.httpTraceKeysInjector);
+		this.request = get("/foo/bar/baz").accept(MediaType.ALL)
+				.buildRequest(new MockServletContext());
+
+		filter.doFilter(this.request, this.response, this.filterChain);
+
+		assertThat(this.span).hasNameEqualTo("get /foo/bar/baz");
 		then(TestSpanContextHolder.getCurrentSpan()).isNull();
 	}
 
