@@ -161,7 +161,7 @@ public class TraceFilterTests {
 		// We add a child span on the server side to show which controller serviced the request
 		assertThat(this.span.getParents()).containsOnly(PARENT_ID);
 		assertThat(parentSpan())
-				.hasNameEqualTo("http:/parent/")
+				.hasNameEqualTo("parent /")
 				.hasATag("http.url", "http://localhost/?foo=bar")
 				.hasATag("http.host", "localhost")
 				.hasATag("http.path", "/")
@@ -187,7 +187,7 @@ public class TraceFilterTests {
 	private Span parentSpan() {
 		Optional<Span> parent = this.spanReporter.getSpans().stream()
 				.filter(span -> Span.idToHex(span.getSpanId()).equals(PARENT_ID_AS_STRING)
-				|| span.getName().equals("http:/parent/"))
+				|| span.getName().equals("parent /"))
 				.findFirst();
 		assertThat(parent.isPresent()).isTrue();
 		return parent.get();

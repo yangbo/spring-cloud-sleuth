@@ -87,7 +87,7 @@ public class SpringDataInstrumentationTests {
 		then(this.arrayListSpanAccumulator.getSpans()).isNotEmpty();
 		Awaitility.await().until(() -> {
 			then(new ListOfSpans(this.arrayListSpanAccumulator.getSpans()))
-					.hasASpanWithName("http:/reservations")
+					.hasASpanWithName("get /reservations")
 					.hasASpanWithTagKeyEqualTo("mvc.controller.class");
 		});
 		then(this.tracer.getCurrentSpan()).isNull();

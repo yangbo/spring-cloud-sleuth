@@ -100,7 +100,7 @@ class TraceFeignClient implements Client {
 
 	private String getSpanName(Request request) {
 		URI uri = URI.create(request.url());
-		return request.method() + " " + uri.getPath();
+		return request.method().toLowerCase() + " " + uri.getPath();
 	}
 
 	/**

@@ -94,7 +94,7 @@ public class TraceZuulIntegrationTests {
 		then(this.tracer.getCurrentSpan()).isNull();
 		then(new ListOfSpans(this.spanAccumulator.getSpans()))
 				.everyParentIdHasItsCorrespondingSpan()
-				.clientSideSpanWithNameHasTags("http:/simple/foo",
+				.clientSideSpanWithNameHasTags("get /simple/foo",
 						TestTag.tag().tag("http.method", "GET")
 								.tag("http.status_code", "200")
 								.tag("http.path", "/simple/foo"));
@@ -115,7 +115,7 @@ public class TraceZuulIntegrationTests {
 		then(this.tracer.getCurrentSpan()).isNull();
 		then(new ListOfSpans(this.spanAccumulator.getSpans()))
 				.everyParentIdHasItsCorrespondingSpan()
-				.clientSideSpanWithNameHasTags("http:/simple/nonExistentUrl",
+				.clientSideSpanWithNameHasTags("get /simple/nonExistentUrl",
 						TestTag.tag().tag("http.method", "GET")
 								.tag("http.status_code", "404")
 								.tag("http.path", "/simple/nonExistentUrl"));

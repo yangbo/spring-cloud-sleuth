@@ -62,7 +62,7 @@ public class MultipleHopsIntegrationTests {
 		await().atMost(5, SECONDS).until(() -> {
 			then(this.arrayListSpanAccumulator.getSpans().stream().map(Span::getName)
 					.collect(
-					toList())).containsAll(asList("http:/greeting", "message:greetings",
+					toList())).containsAll(asList("get /greeting", "message:greetings",
 													"message:words", "message:counts"));
 		});
 	}

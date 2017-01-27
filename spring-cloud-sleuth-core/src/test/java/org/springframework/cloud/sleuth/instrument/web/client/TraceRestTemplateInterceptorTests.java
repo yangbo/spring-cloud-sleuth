@@ -150,7 +150,7 @@ public class TraceRestTemplateInterceptorTests {
 
 		this.template.getForEntity("/", Map.class).getBody();
 
-		then(this.testController.span).hasNameEqualTo("http:/");
+		then(this.testController.span).hasNameEqualTo("get /");
 	}
 
 	@RestController
