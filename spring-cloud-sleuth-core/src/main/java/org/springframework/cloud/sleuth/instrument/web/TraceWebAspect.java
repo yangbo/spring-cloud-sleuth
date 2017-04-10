@@ -94,7 +94,7 @@ public class TraceWebAspect {
 	@Pointcut("(anyRestControllerAnnotated() || anyControllerAnnotated()) && anyPublicMethodReturningWebAsyncTask()")
 	private void anyControllerOrRestControllerWithPublicWebAsyncTaskMethod() { } // NOSONAR
 
-	@Around("anyControllerOrRestControllerWithPublicAsyncMethod()")
+	@Around("anyControllerOrRestControllerWithPublicAsyncMethod() && !within(is(FinalType))")
 	@SuppressWarnings("unchecked")
 	public Object wrapWithCorrelationId(ProceedingJoinPoint pjp) throws Throwable {
 		Callable<Object> callable = (Callable<Object>) pjp.proceed();
@@ -109,7 +109,7 @@ public class TraceWebAspect {
 		}
 	}
 
-	@Around("anyControllerOrRestControllerWithPublicWebAsyncTaskMethod()")
+	@Around("anyControllerOrRestControllerWithPublicWebAsyncTaskMethod() && !within(is(FinalType))")
 	public Object wrapWebAsyncTaskWithCorrelationId(ProceedingJoinPoint pjp) throws Throwable {
 		final WebAsyncTask<?> webAsyncTask = (WebAsyncTask<?>) pjp.proceed();
 		if (this.tracer.isTracing()) {

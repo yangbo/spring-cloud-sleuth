@@ -56,7 +56,7 @@ public class TraceSchedulingAspect {
 		this.skipPattern = skipPattern;
 	}
 
-	@Around("execution (@org.springframework.scheduling.annotation.Scheduled  * *.*(..))")
+	@Around("execution (@org.springframework.scheduling.annotation.Scheduled  * *.*(..)) && !within(is(FinalType))")
 	public Object traceBackgroundThread(final ProceedingJoinPoint pjp) throws Throwable {
 		if (this.skipPattern.matcher(pjp.getTarget().getClass().getName()).matches()) {
 			return pjp.proceed();

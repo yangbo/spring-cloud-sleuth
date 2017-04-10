@@ -55,7 +55,7 @@ public class TraceAsyncAspect {
 		this.beanFactory = beanFactory;
 	}
 
-	@Around("execution (@org.springframework.scheduling.annotation.Async  * *.*(..))")
+	@Around("execution (@org.springframework.scheduling.annotation.Async  * *.*(..)) && !within(is(FinalType))")
 	public Object traceBackgroundThread(final ProceedingJoinPoint pjp) throws Throwable {
 		Span span = this.tracer.createSpan(
 				SpanNameUtil.toLowerHyphen(pjp.getSignature().getName()));
@@ -71,7 +71,7 @@ public class TraceAsyncAspect {
 		}
 	}
 
-	@Around("execution (* org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor.*(..))")
+	@Around("execution (* org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor.*(..)) && !within(is(FinalType))")
 	public Object traceThreadPoolTaskExecutor(final ProceedingJoinPoint pjp) throws Throwable {
 		LazyTraceThreadPoolTaskExecutor executor = new LazyTraceThreadPoolTaskExecutor(this.beanFactory,
 				(ThreadPoolTaskExecutor) pjp.getTarget());
@@ -82,7 +82,7 @@ public class TraceAsyncAspect {
 		return pjp.proceed();
 	}
 
-	@Around("execution (* java.util.concurrent.Executor.*(..))")
+	@Around("execution (* java.util.concurrent.Executor.*(..)) && !within(is(FinalType))")
 	public Object traceExecutor(final ProceedingJoinPoint pjp) throws Throwable {
 		LazyTraceExecutor executor = new LazyTraceExecutor(this.beanFactory,
 				(Executor) pjp.getTarget());
